@@ -5,8 +5,10 @@ import com.example.CustomerServer.dto.ResponseDTO;
 import com.example.CustomerServer.dto.UserDTO;
 import com.example.CustomerServer.model.EmailData;
 import com.example.CustomerServer.model.UserData;
+import com.example.CustomerServer.rabbitmq.MessageConfig;
 import com.example.CustomerServer.service.EmailService;
 import com.example.CustomerServer.service.IUserInterface;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +35,18 @@ public class UserController {
     @Autowired
     private IUserInterface userInterface;
 
+    /*************** injecting Rabbit Template Object ***************/
+    @Autowired
+    RabbitTemplate rabbitTemplate;
+
 
 
     /*************** registering user ***************/
     @PostMapping("/create/")
     public ResponseEntity<ResponseDTO> addUser(@RequestBody UserDTO userDTO) {
-        return userInterface.createUserProfile(userDTO);
+        ResponseEntity<ResponseDTO> userQueue = userInterface.createUserProfile(userDTO);
+        rabbitTemplate.convertAndSend(MessageConfig.EXCHANGE, MessageConfig.ROUTING_KEY, userQueue);
+        return userQueue;
     }
 
     /*************** getting user list  ***************/

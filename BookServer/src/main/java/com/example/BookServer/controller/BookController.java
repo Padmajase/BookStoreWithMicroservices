@@ -3,7 +3,9 @@ package com.example.BookServer.controller;
 import com.example.BookServer.dto.BookDTO;
 import com.example.BookServer.dto.ResponseDTO;
 import com.example.BookServer.model.BookData;
+import com.example.BookServer.rabbitmq.MessageConfig;
 import com.example.BookServer.service.IBookService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +29,16 @@ public class BookController {
     @Autowired
     private IBookService bookInterface;
 
+    /*************** injecting Rabbit Template Object ***************/
+    @Autowired
+    RabbitTemplate rabbitTemplate;
+
     @PostMapping("/addbook/")
     public ResponseEntity<ResponseDTO> addBookInStore(@RequestBody BookDTO bookDTO) {
         BookData bookData;
         bookData = bookInterface.addBook(bookDTO);
         ResponseDTO responseDTO = new ResponseDTO("Book Added With Details : ", bookData);
+        rabbitTemplate.convertAndSend(MessageConfig.EXCHANGE, MessageConfig.ROUTING_KEY, responseDTO);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 

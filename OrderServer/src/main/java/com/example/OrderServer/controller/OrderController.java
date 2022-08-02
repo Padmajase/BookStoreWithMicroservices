@@ -3,8 +3,10 @@ package com.example.OrderServer.controller;
 import com.example.OrderServer.dto.OrderDTO;
 import com.example.OrderServer.dto.ResponseDTO;
 import com.example.OrderServer.model.OrderData;
+import com.example.OrderServer.rabbitmq.MessageConfig;
 import com.example.OrderServer.service.EmailService;
 import com.example.OrderServer.service.IOrderService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,11 @@ public class OrderController {
     @Autowired
     EmailService emailService;
 
+    /*************** injecting Rabbit Template Object ***************/
+    @Autowired
+    RabbitTemplate rabbitTemplate;
+
+
     /*************** placing order for book ***************/
     @PostMapping("/placeorder")
     public ResponseEntity<ResponseDTO> placeOrder(@RequestHeader(name = "token") String token,
@@ -37,6 +44,7 @@ public class OrderController {
                 "Dear " + orderData.getUserData().getFirstName()
                         + ", Your order has placed for Book : "
                         + orderData.getBookData().getBookName());
+        rabbitTemplate.convertAndSend(MessageConfig.EXCHANGE, MessageConfig.ROUTING_KEY, responseDTO);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 

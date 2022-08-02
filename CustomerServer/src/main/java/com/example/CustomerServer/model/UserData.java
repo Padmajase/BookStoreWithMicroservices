@@ -22,7 +22,6 @@ public class UserData {
     private String name;
     private String emailId;
     private String address;
-    private String dateCreated;
     private String password;
 
     public UserData(int userId, UserDTO userDTO) {
@@ -30,7 +29,6 @@ public class UserData {
         this.name = userDTO.name;
         this.emailId = userDTO.emailId;
         this.address = userDTO.address;
-        this.dateCreated = userDTO.dateCreated;
         this.password = userDTO.password;
     }
 

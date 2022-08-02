@@ -11,7 +11,6 @@ public class UserDTO {
     public String name;
     public String emailId;
     public String address;
-    public String dateCreated;
     public String password;
 
 }

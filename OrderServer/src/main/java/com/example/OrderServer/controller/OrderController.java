@@ -51,9 +51,9 @@ public class OrderController {
 
     /*************** update order by ID ***************/
     @PutMapping("/update/{orderId}")
-    public ResponseEntity<ResponseDTO> updateBookData(@PathVariable("orderId") int orderId,
+    public ResponseEntity<ResponseDTO> updateOrder(@PathVariable("orderId") int orderId,
                                                       @RequestBody OrderDTO orderDTO){
-        return  orderService.updateUserById(orderId, orderDTO);
+        return  orderService.updateOrder(orderId, orderDTO);
     }
 
     /*************** delete order by its Id ***************/

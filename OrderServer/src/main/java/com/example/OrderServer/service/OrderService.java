@@ -1,6 +1,7 @@
 package com.example.OrderServer.service;
 
 import com.example.OrderServer.dto.OrderDTO;
+import com.example.OrderServer.dto.ResponseDTO;
 import com.example.OrderServer.exception.UserRegistrationException;
 import com.example.OrderServer.model.BookData;
 import com.example.OrderServer.model.OrderData;
@@ -8,11 +9,11 @@ import com.example.OrderServer.model.UserData;
 import com.example.OrderServer.repository.OrderRepository;
 import com.example.OrderServer.token.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrderService implements IOrderService {
@@ -49,17 +50,19 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public OrderData cancelOrder(String token, int orderId) {
+    public List<OrderData> getOrderList() {
         return null;
     }
 
     @Override
-    public List<OrderData> getAllOrdersOfUser(String token) {
+    public ResponseEntity<ResponseDTO> updateOrder(int orderId, OrderDTO orderDTO) {
         return null;
     }
 
     @Override
-    public List<OrderData> findAllOrders() {
-        return null;
+    public void cancelOrderData(int orderId) {
+
     }
+
+
 }

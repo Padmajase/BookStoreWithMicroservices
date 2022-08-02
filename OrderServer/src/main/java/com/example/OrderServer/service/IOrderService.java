@@ -10,15 +10,9 @@ import java.util.List;
 public interface IOrderService {
     OrderData createOrderData(String token, OrderDTO orderDTO, int bookId);
 
-    OrderData cancelOrder(String token, int orderId);
-
-    List<OrderData> getAllOrdersOfUser(String token);
-
-    List<OrderData> findAllOrders();
-
     List<OrderData> getOrderList();
 
-    ResponseEntity<ResponseDTO> updateUserById(int orderId, OrderDTO orderDTO);
+    ResponseEntity<ResponseDTO> updateOrder(int orderId, OrderDTO orderDTO);
 
     void cancelOrderData(int orderId);
 }

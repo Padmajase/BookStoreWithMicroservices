@@ -19,7 +19,7 @@ public class OrderData {
 
     @Id
     private int orderId;
-    private int price;
+
     private LocalDate orderDate;
     private int quantity;
     private String address;
@@ -39,7 +39,6 @@ public class OrderData {
         this.bookData = book;
     }
     public void createOrder(OrderDTO orderDTO){
-        this.price = orderDTO.getPrice();
         this.orderDate = orderDTO.getOrderDate();
         this.address = orderDTO.getAddress();
         this.quantity = orderDTO.getQuantity();

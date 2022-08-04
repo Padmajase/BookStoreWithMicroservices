@@ -40,7 +40,6 @@ public class UserController {
     RabbitTemplate rabbitTemplate;
 
 
-
     /*************** registering user ***************/
     @PostMapping("/create/")
     public ResponseEntity<ResponseDTO> addUser(@RequestBody UserDTO userDTO) {

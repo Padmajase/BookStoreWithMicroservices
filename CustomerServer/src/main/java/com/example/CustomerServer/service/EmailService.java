@@ -10,7 +10,6 @@ public class EmailService {
 
     @Autowired
     JavaMailSender javaMailSender;
-
     public void sendEmail(String toEmail,
                           String subject,
                           String body) {

@@ -30,7 +30,6 @@ public class UserData {
         this.name = userDTO.name;
         this.emailId = userDTO.emailId;
         this.address = userDTO.address;
-        this.dateCreated = userDTO.dateCreated;
         this.password = userDTO.password;
     }
 

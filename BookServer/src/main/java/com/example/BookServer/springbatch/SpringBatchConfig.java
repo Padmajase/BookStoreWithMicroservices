@@ -67,8 +67,7 @@ public class SpringBatchConfig {
     public FlatFileItemReader<BookData> itemReader() {
 
         FlatFileItemReader<BookData> flatFileItemReader = new FlatFileItemReader<>();
-        flatFileItemReader.setResource(new FileSystemResource("D:\\BRIDGLABZ\\3.CFP\\Advanced Backend\\" +
-                "SpringMicroservices\\BookServer\\src\\main\\resources\\Book.csv"));
+        flatFileItemReader.setResource(new FileSystemResource("D:\\BRIDGLABZ\\3.CFP\\Advanced Backend\\SpringMicroservices\\BookServer\\src\\main\\resources\\Book.csv"));
         flatFileItemReader.setResource(new ClassPathResource("Book.csv"));
 //        flatFileItemReader.setName("CSV-Reader");
         flatFileItemReader.setLineMapper(lineMapper());
@@ -84,7 +83,7 @@ public class SpringBatchConfig {
         DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
         //        lineTokenizer.setDelimiter(",");
 //        lineTokenizer.setStrict(false);
-        lineTokenizer.setNames(new String[]{"booId", "bookName", "bookAuthor", "bookPrice", "quantity"});
+        lineTokenizer.setNames(new String[]{"booKId", "bookName", "bookAuthor", "bookPrice", "quantity"});
         lineTokenizer.setIncludedFields(new int[]{0,1,2,3,4});
 
         BeanWrapperFieldSetMapper<BookData> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
@@ -97,8 +96,8 @@ public class SpringBatchConfig {
 
     /*************** creating processor ***************/
     @Bean
-    public OrderItemProcessor itemProcessor(){
-        return new OrderItemProcessor();
+    public BookItemProcessor itemProcessor(){
+        return new BookItemProcessor();
     }
 
     /*************** creating writer ***************/

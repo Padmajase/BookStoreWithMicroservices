@@ -80,7 +80,7 @@ public class UserService implements IUserInterface{
                 userData.setName(userDTO.name);
                 userData.setAddress(userDTO.address);
                 userData.setEmailId(userDTO.emailId);
-                userData.setDateCreated(userDTO.dateCreated);
+//                userData.setDateCreated(userDTO.dateCreated);
                 userData.setPassword(userDTO.password);
 
                 userRepository.save(userData);

@@ -14,7 +14,6 @@ public class OrderDTO {
 
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate orderDate;
-    private int price;
     private int quantity;
     private String address;
     private boolean cancel = false;

@@ -60,8 +60,8 @@ public class OrderController {
     /*************** update order by ID ***************/
     @PutMapping("/update/{orderId}")
     public ResponseEntity<ResponseDTO> updateOrder(@PathVariable("orderId") int orderId,
-                                                      @RequestBody OrderDTO orderDTO){
-        return  orderService.updateOrder(orderId, orderDTO);
+                                                      @RequestParam String address){
+        return  orderService.updateOrder(orderId, address);
     }
 
     /*************** delete order by its Id ***************/

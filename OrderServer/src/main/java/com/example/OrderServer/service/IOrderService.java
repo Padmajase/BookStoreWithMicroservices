@@ -12,7 +12,7 @@ public interface IOrderService {
 
     List<OrderData> getOrderList();
 
-    ResponseEntity<ResponseDTO> updateOrder(int orderId, OrderDTO orderDTO);
+    ResponseEntity<ResponseDTO> updateOrder(int orderId, String address);
 
     void cancelOrderData(int orderId);
 }

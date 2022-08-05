@@ -27,11 +27,11 @@ public class OrderData {
 
 
     @ManyToOne
-    @JoinColumn(name = "user_ID", referencedColumnName = "UserId")
+    @JoinColumn(name = "userId", referencedColumnName = "UserId")
     private UserData userData;
 
     @ManyToOne
-    @JoinColumn(name = "book_ID", referencedColumnName = "BookId")
+    @JoinColumn(name = "bookId", referencedColumnName = "BookId")
     private BookData bookData;
 
     public OrderData(UserData user, BookData book, OrderDTO orderDTO) {

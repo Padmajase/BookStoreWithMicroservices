@@ -83,7 +83,7 @@ public class SpringBatchConfig {
         DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
         //        lineTokenizer.setDelimiter(",");
 //        lineTokenizer.setStrict(false);
-        lineTokenizer.setNames(new String[]{"booKId", "bookName", "bookAuthor", "bookPrice", "quantity"});
+        lineTokenizer.setNames(new String[]{"bookId", "bookName", "bookAuthor", "bookPrice", "quantity"});
         lineTokenizer.setIncludedFields(new int[]{0,1,2,3,4});
 
         BeanWrapperFieldSetMapper<BookData> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
@@ -106,7 +106,7 @@ public class SpringBatchConfig {
 
         JdbcBatchItemWriter<BookData> writer = new JdbcBatchItemWriter<>();
         writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<BookData>());
-        writer.setSql("insert into book_data(bookId,bookName,bookAuthor,bookPrice,quantity) values (:bookId,:bookName," +
+        writer.setSql("insert into book_data(bookId,bookName,bookAuthor,bookPrice, quantity) values (:bookId,:bookName," +
                 ":bookAuthor,:bookPrice,:quantity)");
         writer.setDataSource((this.dataSource));
         return writer;

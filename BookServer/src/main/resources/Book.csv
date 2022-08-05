@@ -1,2 +1,4 @@
-1bookId,bookName,bookAuthor,bookPrice,quantity
-21,"UX Design", "steve krug", 1200,2
+1book_id,book_name,book_author,book_price,quantity
+22,"UX Design", "steve krug", 1200,3
+23,"UX Design", "steve krug", 1200,3
+24,"UX Design", "steve krug", 1200,3

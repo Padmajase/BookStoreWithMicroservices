@@ -9,11 +9,13 @@ import com.example.OrderServer.model.UserData;
 import com.example.OrderServer.repository.OrderRepository;
 import com.example.OrderServer.token.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService implements IOrderService {
@@ -51,17 +53,25 @@ public class OrderService implements IOrderService {
 
     @Override
     public List<OrderData> getOrderList() {
-        return null;
+        return orderRepository.findAll();
     }
 
     @Override
-    public ResponseEntity<ResponseDTO> updateOrder(int orderId, OrderDTO orderDTO) {
-        return null;
+    public ResponseEntity<ResponseDTO> updateOrder(int orderId, String address) {
+        Optional<OrderData> order = orderRepository.findById(orderId);
+        if(order.isEmpty())
+            throw new UserRegistrationException("no order present");
+//        not recognized optional
+        order.get().setAddress(address);
+        orderRepository.save(order.get());
+        ResponseDTO responseDTO = new ResponseDTO("order updated", order);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+
     }
 
     @Override
     public void cancelOrderData(int orderId) {
-
+        orderRepository.deleteById(orderId);
     }
 
 

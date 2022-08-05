@@ -71,10 +71,6 @@
 			<artifactId>mail</artifactId>
 			<version>1.4</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/javax.mail/smtp -->
-		<!-- https://mvnrepository.com/artifact/javax.mail/sqljdbc4 -->
-
-
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

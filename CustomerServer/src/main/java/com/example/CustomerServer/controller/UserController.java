@@ -6,7 +6,7 @@ import com.example.CustomerServer.dto.UserDTO;
 import com.example.CustomerServer.model.EmailData;
 import com.example.CustomerServer.model.UserData;
 import com.example.CustomerServer.rabbitmq.MessageConfig;
-import com.example.CustomerServer.service.EmailService;
+import com.example.CustomerServer.util.EmailService;
 import com.example.CustomerServer.service.IUserInterface;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,17 +57,28 @@ public class UserController {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-    /*************** getting user by token ***************/
-    @GetMapping("/getByToken?token=")
-    public ResponseEntity<ResponseDTO> getBookById(@RequestParam String token) {
-        return userInterface.getUserByToken(token);
+    /*************** get user by ID ***************/
+    @GetMapping("/get/{userId}")
+    public ResponseEntity<ResponseDTO> updateBookData(@PathVariable("userId") int userId){
+        Optional<UserData> userData;
+        userData = userInterface.getUserById(userId);
+        ResponseDTO responseDTO = new ResponseDTO("user details with given id is : ", userData);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
 
     }
+
+
     /*************** update user by ID ***************/
     @PutMapping("/update/{userId}")
     public ResponseEntity<ResponseDTO> updateBookData(@PathVariable("userId") int userId,
                                                       @RequestBody UserDTO userDTO){
         return  userInterface.updateUserById(userId, userDTO);
+    }
+
+    /*************** getting user by token ***************/
+    @GetMapping("/getByToken?token=")
+    public ResponseEntity<ResponseDTO> getBookById(@RequestParam String token) {
+        return userInterface.getUserByToken(token);
     }
 
     /*************** delete user by its Id ***************/

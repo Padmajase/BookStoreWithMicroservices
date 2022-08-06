@@ -3,32 +3,35 @@ package com.example.BookServer.model;
 import com.example.BookServer.dto.BookDTO;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name = "book_data")
 public class BookData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int bookId;
+//    @Column(name = "book_name")
     private String bookName;
+//    @Column(name = "book_author")
     private String bookAuthor;
+    @Column(name = "book_price")
     private long bookPrice;
+    @Column(name = "quantity")
     private int quantity;
 
-    public BookData(int bookId, BookDTO bookDTO) {
-        this.bookId=bookId;
-        this.bookName=bookDTO.bookName;
-        this.bookAuthor=bookDTO.bookAuthor;
-        this.bookPrice=bookDTO.bookPrice;
-        this.quantity = bookDTO.quantity;
+    public BookData() {
     }
+
+    public BookData(BookDTO bookDTO) {
+        this.bookName = bookDTO.bookName;
+        this.bookAuthor = bookDTO.bookAuthor;
+        this.bookPrice = bookDTO.bookPrice;
+        this.quantity = bookDTO.quantity;
+   }
 }

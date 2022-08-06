@@ -9,6 +9,6 @@ public class BookConsumer {
 
     @RabbitListener(queues = MessageConfig.QUEUE)
     public  void consumerMessageFormatQueue(BookData bookData){
-        System.out.println("Message Received From Queue : " +bookData);
+        System.out.println("Message Received From Book Queue : " +bookData);
     }
 }

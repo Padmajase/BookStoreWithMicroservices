@@ -1,11 +1,9 @@
-package com.example.BookServer.controller;
+package com.example.BookModule.controller;
 
-import com.example.BookServer.dto.BookDTO;
-import com.example.BookServer.dto.ResponseDTO;
-import com.example.BookServer.model.BookData;
-import com.example.BookServer.rabbitmq.MessageConfig;
-import com.example.BookServer.service.IBookService;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import com.example.BookModule.dto.BookDTO;
+import com.example.BookModule.dto.ResponseDTO;
+import com.example.BookModule.model.BookModuleData;
+import com.example.BookModule.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,37 +23,32 @@ update book details.
 @RequestMapping("/book")
 public class BookController {
 
-    /*************** injecting Book Interface Object ***************/
     @Autowired
     private IBookService bookInterface;
 
-    /*************** injecting Rabbit Template Object ***************/
 
-    RabbitTemplate rabbitTemplate;
-
-    @PostMapping("/addbook/")
+    @PostMapping("/add/")
     public ResponseEntity<ResponseDTO> addBookInStore(@RequestBody BookDTO bookDTO) {
-        BookData bookData;
+        BookModuleData bookData;
         bookData = bookInterface.addBook(bookDTO);
         ResponseDTO responseDTO = new ResponseDTO("Book Added With Details : ", bookData);
-//        rabbitTemplate.convertAndSend(MessageConfig.EXCHANGE, MessageConfig.ROUTING_KEY, responseDTO);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
 
     /*************** getting book list in book store ***************/
-    @GetMapping(value = {"","/","/get"})
+    @GetMapping(value = {"","/","/get/"})
     public ResponseEntity<ResponseDTO> getBookList() {
-        List<BookData> listOfBook;
+        List<BookModuleData> listOfBook;
         listOfBook = bookInterface.getBookList();
         ResponseDTO responseDTO = new ResponseDTO("Books Available :", listOfBook);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     /*************** getting book by id in book store ***************/
-    @GetMapping("/get/{bookId}")
+    @GetMapping("/getById/{bookId}")
     public ResponseEntity<ResponseDTO> getBookById(@PathVariable("bookId") int bookId) {
-        Optional<BookData> bookData;
+        Optional<BookModuleData> bookData;
         bookData = bookInterface.getBookById(bookId);
         ResponseDTO responseDTO = new ResponseDTO("Books details with given id is : ", bookData);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);

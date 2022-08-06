@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import com.example.CustomerServer.util.EmailService;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -26,17 +28,20 @@ public class UserService implements IUserInterface{
     @Autowired
     private TokenUtil tokenUtil;
 
+//    @Autowired
+//    private  EmailService emailService;
+
     @Autowired
-    private  EmailService emailService;
+    EmailService emailService;
 
     /*************** adding user details to user repository ***************/
     @Override
     public ResponseEntity<ResponseDTO> createUserProfile(UserDTO userDTO) {
-        UserData userData = new UserData(userRepository.findAll().size() + 1, userDTO);
+        UserData userData = new UserData(userDTO);
         userRepository.save(userData);
         String token;
         token = tokenUtil.createToken(userData.getUserId());
-        emailService.sendEmail("padmajapawar7@gmail,com", "u have registered to book store ", token);
+        emailService.sendEmail("padmajapawar7@gmail.com", "u have registered to book store ", token);
         ResponseDTO respDTO = new ResponseDTO("User registered successfully ", token);
         return new ResponseEntity<>(respDTO, HttpStatus.OK);
     }
@@ -96,7 +101,7 @@ public class UserService implements IUserInterface{
 
     @Override
     public Optional<UserData> getUserById(int userId) {
-        return Optional.empty();
+        return userRepository.findById(userId);
     }
 
     @Override

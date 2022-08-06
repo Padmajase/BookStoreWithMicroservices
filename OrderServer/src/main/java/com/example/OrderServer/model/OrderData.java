@@ -5,26 +5,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+@Table(name = "order_data")
 public class OrderData {
 
     @Id
     private int orderId;
-
     private LocalDate orderDate;
     private int quantity;
     private String address;
-    private boolean cancel = false;
-
 
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "UserId")
@@ -34,14 +28,14 @@ public class OrderData {
     @JoinColumn(name = "bookId", referencedColumnName = "BookId")
     private BookData bookData;
 
+    public OrderData() {
+    }
+
     public OrderData(UserData user, BookData book, OrderDTO orderDTO) {
         this.userData = user;
         this.bookData = book;
-    }
-    public void createOrder(OrderDTO orderDTO){
         this.orderDate = orderDTO.getOrderDate();
-        this.address = orderDTO.getAddress();
         this.quantity = orderDTO.getQuantity();
-        this.cancel = false;
+        this.address = orderDTO.getAddress();
     }
 }

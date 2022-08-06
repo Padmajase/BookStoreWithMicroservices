@@ -34,10 +34,10 @@ public class CartService implements ICartService{
 
     /*************** adding book in cart repository ***************/
     @Override
-    public ResponseEntity<ResponseDTO> saveBooksToCart(int quantity, int bookId, String token) throws Exception {
-        BookData bookData  = restTemplate.getForObject("http://localhost:8001/book/getById/" + bookId, BookData.class);
-//        UserData userData  = restTemplate.getForObject("http://localhost:8002/user/getById" + userId, UserData.class);
-        UserData userData  = restTemplate.getForObject("http://localhost:8002/user?token=" + token, UserData.class);
+    public ResponseEntity<ResponseDTO> saveBooksToCart(int quantity, int bookId, int userId) throws Exception {
+        BookData bookData  = restTemplate.getForObject("localhost:8001/book/get/" + bookId, BookData.class);
+        UserData userData  = restTemplate.getForObject("localhost:8002/user/get/" + userId, UserData.class);
+//        UserData userData  = restTemplate.getForObject("http://localhost:8002/user?token=" + token, UserData.class);
         if(bookData == null || userData == null){
             throw new CartException("the user not found  "+ userData + " or the book not found "+bookData, CartException.ExceptionType.ENDPOINT_INVALID_OR_NULL);
         }
@@ -71,5 +71,10 @@ public class CartService implements ICartService{
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
         } else
             throw new CartException("book not found with given id ", CartException.ExceptionType.NOT_VALID_CART_DATA);
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO> saveBooksToCart(int quantity, int bookId, String token) throws Exception {
+        return null;
     }
 }

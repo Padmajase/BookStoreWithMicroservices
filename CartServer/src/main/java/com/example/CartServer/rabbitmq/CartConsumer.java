@@ -1,5 +1,6 @@
 package com.example.CartServer.rabbitmq;
 
+import com.example.CartServer.model.CartData;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
@@ -7,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class CartConsumer {
 
     @RabbitListener(queues = MessageConfig.QUEUE)
-    public  void consumerMessageFormatQueue(CartRabbit cartRabbit){
-        System.out.println("Message Received From Queue : " +cartRabbit);
+    public  void consumerMessageFormatQueue(CartData cartData){
+        System.out.println("Message Received From Queue : " +cartData);
     }
 }

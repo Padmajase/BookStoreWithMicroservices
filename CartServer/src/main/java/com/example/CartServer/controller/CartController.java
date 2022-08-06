@@ -1,7 +1,6 @@
 package com.example.CartServer.controller;
 import com.example.CartServer.dto.ResponseDTO;
 import com.example.CartServer.model.CartData;
-import com.example.CartServer.rabbitmq.CartRabbit;
 import com.example.CartServer.rabbitmq.MessageConfig;
 import com.example.CartServer.service.ICartService;
 import com.example.CartServer.token.TokenUtil;
@@ -34,8 +33,9 @@ public class CartController {
     /*************** inserting book into cart ***************/
     @PostMapping("/save/{quantity}")
     public ResponseEntity<ResponseDTO> saveBooksToCart(@PathVariable int quantity, @RequestParam("bookId") int bookId, @RequestParam("id") int userId) throws Exception {
-            String token = tokenUtil.createToken(userId);
-        ResponseEntity<ResponseDTO> cartRabbit = cartService.saveBooksToCart(quantity, bookId, token);
+        String token = tokenUtil.createToken(userId);
+//        ResponseEntity<ResponseDTO> cartRabbit = cartService.saveBooksToCart(quantity, bookId, token);
+        ResponseEntity<ResponseDTO> cartRabbit = cartService.saveBooksToCart(quantity, bookId, userId);
         rabbitTemplate.convertAndSend(MessageConfig.EXCHANGE, MessageConfig.ROUTING_KEY, cartRabbit);
         return cartRabbit;
         }

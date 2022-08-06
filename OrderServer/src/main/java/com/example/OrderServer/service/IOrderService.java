@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface IOrderService {
-    OrderData createOrderData(String token, OrderDTO orderDTO, int bookId);
+    OrderData createOrderData(OrderDTO orderDTO, int bookId, int userId);
 
     List<OrderData> getOrderList();
 

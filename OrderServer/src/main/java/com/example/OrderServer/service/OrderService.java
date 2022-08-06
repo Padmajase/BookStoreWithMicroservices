@@ -34,18 +34,15 @@ public class OrderService implements IOrderService {
 
 
     @Override
-    public OrderData createOrderData(String token, OrderDTO orderDTO, int bookId) {
-        int userId = tokenUtil.decodeToken(token);
-        UserData userData  = restTemplate.getForObject("http://localhost:8002/user/getById?token=" + token, UserData.class);
-//        UserData userData = restTemplate.getForObject("localhost:8002/user/getById/" + userId,UserData.class);
-        BookData bookData = restTemplate.getForObject("localhost:8001/book/getById" + bookId,BookData.class);
+    public OrderData createOrderData(OrderDTO orderDTO, int bookId, int userId) {
+//        int userId = tokenUtil.decodeToken(token);
+//        UserData userData  = restTemplate.getForObject("http://localhost:8002/user/getById?token=" + token, UserData.class);
+        UserData userData = restTemplate.getForObject("localhost:8002/user/get/" + userId,UserData.class);
+        BookData bookData = restTemplate.getForObject("localhost:8001/book/getById/" + bookId,BookData.class);
         if(bookData == null || userData == null){
             throw new UserRegistrationException("User Id or Book Id is Invalid");
         } else {
             OrderData orderData = new OrderData(userData, bookData, orderDTO);
-            orderData.setUserData(userData);
-            orderData.setBookData(bookData);
-            orderData.createOrder(orderDTO);
             orderRepository.save(orderData);
             return orderData;
         }
@@ -73,6 +70,4 @@ public class OrderService implements IOrderService {
     public void cancelOrderData(int orderId) {
         orderRepository.deleteById(orderId);
     }
-
-
 }

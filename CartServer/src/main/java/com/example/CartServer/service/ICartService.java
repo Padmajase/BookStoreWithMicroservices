@@ -10,6 +10,8 @@ import java.util.List;
 public interface ICartService {
     List<CartData> getBookListInCart();
 
+    ResponseEntity<ResponseDTO> saveBooksToCart(int quantity, int bookId, int userId) throws Exception;
+
     ResponseEntity<ResponseDTO> updateBookQuantity(int quantity, int cartBookId);
 
     ResponseEntity<ResponseDTO> deleteBookFromCart(int bookId);

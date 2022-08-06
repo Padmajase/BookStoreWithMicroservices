@@ -35,10 +35,12 @@ public class OrderController {
 
     /*************** placing order for book ***************/
     @PostMapping("/placeorder")
-    public ResponseEntity<ResponseDTO> placeOrder(@RequestHeader(name = "token") String token,
+    public ResponseEntity<ResponseDTO> placeOrder(
+//            @RequestHeader(name = "token") String token,
                                                   @RequestBody OrderDTO orderDTO,
-                                                  @RequestParam int bookId) {
-        OrderData orderData = orderService.createOrderData(token, orderDTO, bookId);
+                                                  @RequestParam int bookId,
+                                                  @RequestParam int userId) {
+        OrderData orderData = orderService.createOrderData(orderDTO, bookId, userId);
         ResponseDTO responseDTO = new ResponseDTO("Order placed", orderData);
         emailService.sendEmail(orderData.getUserData().getEmailId(), "Order Placed Successfully.",
                 "Dear " + orderData.getUserData().getFirstName()

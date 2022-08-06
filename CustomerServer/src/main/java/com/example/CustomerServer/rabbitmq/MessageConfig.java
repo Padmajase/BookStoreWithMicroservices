@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MessageConfig {
-    public static final String QUEUE = "book_Queue";
+    public static final String QUEUE = "user_Queue";
     public static final String EXCHANGE = "exchange";
     public static final String ROUTING_KEY = "rabbit_Routing_Key";
 

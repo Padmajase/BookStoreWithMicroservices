@@ -1,9 +1,9 @@
-package com.example.BookServer.service;
+package com.example.BookModule.service;
 
-import com.example.BookServer.dto.BookDTO;
-import com.example.BookServer.dto.ResponseDTO;
-import com.example.BookServer.model.BookData;
-import com.example.BookServer.repository.BookRepository;
+import com.example.BookModule.dto.BookDTO;
+import com.example.BookModule.dto.ResponseDTO;
+import com.example.BookModule.model.BookModuleData;
+import com.example.BookModule.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +18,15 @@ public class BookService implements IBookService {
     @Autowired
     private BookRepository bookRepository;
     @Override
-    public BookData addBook(BookDTO bookDTO) {
-        BookData bookData = new BookData(bookDTO);
-//        BookData bookData = new BookData(bookDTO);
+    public BookModuleData addBook(BookDTO bookDTO) {
+//        BookData bookData = new BookData(  bookDTO);
+        BookModuleData bookData = new BookModuleData(bookDTO);
         bookRepository.save(bookData);
         return bookData;
     }
 
-
     @Override
-    public List<BookData> getBookList() {
+    public List<BookModuleData> getBookList() {
         return bookRepository.findAll();
     }
 
@@ -38,8 +37,8 @@ public class BookService implements IBookService {
 
     @Override
     public ResponseEntity<ResponseDTO> updateBookById(int bookId, BookDTO bookDTO) {
-        List<BookData> bookDataList = this.getBookList();
-        for (BookData bookData : bookDataList) {
+        List<BookModuleData> bookDataList = this.getBookList();
+        for (BookModuleData bookData : bookDataList) {
             if(bookData.getBookId() == bookId) {
                 bookData.setBookName(bookDTO.bookName);
                 bookData.setBookAuthor(bookDTO.bookAuthor);
@@ -58,7 +57,7 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public Optional<BookData> getBookById(int bookId) {
+    public Optional<BookModuleData> getBookById(int bookId) {
         return bookRepository.findById(bookId);
     }
 }

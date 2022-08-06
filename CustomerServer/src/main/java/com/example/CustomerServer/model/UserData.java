@@ -1,19 +1,17 @@
 package com.example.CustomerServer.model;
 
 import com.example.CustomerServer.dto.UserDTO;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
+@Table(name = "user_data")
 public class UserData {
 
     @Id
@@ -32,18 +30,10 @@ public class UserData {
         this.password = userDTO.password;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-    public String getPassword() {
-        return password;
-    }
-
-    public String getEmailId() {
-        return emailId;
-    }
-
-    public String getFirstName() {
-        return name;
+    public UserData(UserDTO userDTO) {
+        this.name = userDTO.name;
+        this.emailId =userDTO.emailId;
+        this.address = userDTO.address;
+        this.password = userDTO.password;
     }
 }

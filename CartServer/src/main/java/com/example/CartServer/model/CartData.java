@@ -11,24 +11,25 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartData {
+
     @Id
     @GeneratedValue
-    private int cartId;
-    @ManyToOne
-    @JoinColumn(name = "book_data_book_id")
-    private BookData bookData;
-    @ManyToOne
-    @JoinColumn(name = "user_data_user_id")
-    private UserData userData;
-    private int quantity;
+    public Integer cartId;
+    @OneToOne
+    @JoinColumn(name = "cart_data_book_id", referencedColumnName = "bookId")
+    public BookData bookData;
+    @OneToOne
+    @JoinColumn(name = "cart_data_user_id", referencedColumnName = "userId")
+    public UserData userData;
+    public Integer quantity;
 
-    public CartData(BookData bookData, UserData userData, int quantity) {
+    public CartData(BookData bookData, UserData userData, Integer quantity) {
         this.bookData = bookData;
         this.userData = userData;
         this.quantity = quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 }

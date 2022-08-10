@@ -31,6 +31,7 @@ public class BookController {
 
     /*************** injecting Rabbit Template Object ***************/
 
+    @Autowired
     RabbitTemplate rabbitTemplate;
 
     @PostMapping("/addbook/")
@@ -38,7 +39,7 @@ public class BookController {
         BookData bookData;
         bookData = bookInterface.addBook(bookDTO);
         ResponseDTO responseDTO = new ResponseDTO("Book Added With Details : ", bookData);
-//        rabbitTemplate.convertAndSend(MessageConfig.EXCHANGE, MessageConfig.ROUTING_KEY, responseDTO);
+        rabbitTemplate.convertAndSend(MessageConfig.EXCHANGE, MessageConfig.ROUTING_KEY, bookData);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
@@ -54,23 +55,22 @@ public class BookController {
 
     /*************** getting book by id in book store ***************/
     @GetMapping("/get/{bookId}")
-    public ResponseEntity<ResponseDTO> getBookById(@PathVariable("bookId") int bookId) {
-        Optional<BookData> bookData;
-        bookData = bookInterface.getBookById(bookId);
+    public ResponseEntity<ResponseDTO> getBookById(@PathVariable Integer bookId) {
+        BookData bookData = bookInterface.getBookById(bookId);
         ResponseDTO responseDTO = new ResponseDTO("Books details with given id is : ", bookData);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     /*************** update book by ID ***************/
     @PutMapping("/update/{bookId}")
-    public ResponseEntity<ResponseDTO> updateBookData(@PathVariable("bookId") int bookId,
+    public ResponseEntity<ResponseDTO> updateBookData(@PathVariable("bookId") Integer bookId,
                                                       @RequestBody BookDTO bookDTO){
         return  bookInterface.updateBookById(bookId, bookDTO);
     }
 
     /*************** delete book by its Id ***************/
     @DeleteMapping("/delete/{bookId}")
-    public ResponseEntity<ResponseDTO> deleteBookById(@PathVariable int bookId){
+    public ResponseEntity<ResponseDTO> deleteBookById(@PathVariable Integer bookId){
         bookInterface.deleteBookData(bookId);
         ResponseDTO respDTO = new ResponseDTO("Book Deleted Successfully", "with book Id : " +bookId);
         return new ResponseEntity<>(respDTO, HttpStatus.OK);

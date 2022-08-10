@@ -35,23 +35,16 @@ public class OrderController {
 
     /*************** placing order for book ***************/
     @PostMapping("/placeorder")
-    public ResponseEntity<ResponseDTO> placeOrder(
-//            @RequestHeader(name = "token") String token,
-                                                  @RequestBody OrderDTO orderDTO,
-                                                  @RequestParam int bookId,
-                                                  @RequestParam int userId) {
-        OrderData orderData = orderService.createOrderData(orderDTO, bookId, userId);
+    public ResponseEntity<ResponseDTO> placeOrder(@RequestBody OrderDTO orderDTO) {
+        OrderData orderData = orderService.createOrderData(orderDTO);
         ResponseDTO responseDTO = new ResponseDTO("Order placed", orderData);
-        emailService.sendEmail(orderData.getUserData().getEmailId(), "Order Placed Successfully.",
-                "Dear " + orderData.getUserData().getFirstName()
-                        + ", Your order has placed for Book : "
-                        + orderData.getBookData().getBookName());
-        rabbitTemplate.convertAndSend(MessageConfig.EXCHANGE, MessageConfig.ROUTING_KEY, responseDTO);
+        emailService.sendEmail("padmajapawar7@gmail.com", "Order Placed Successfully.","");
+//        rabbitTemplate.convertAndSend(MessageConfig.EXCHANGE, MessageConfig.ROUTING_KEY, responseDTO);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
    /*************** getting order list  ***************/
-    @GetMapping(value = {"","/","/list"})
+    @GetMapping(value = {"","/","/get"})
     public ResponseEntity<ResponseDTO> getOrderList() {
         List<OrderData> listOfOrder;
         listOfOrder = orderService.getOrderList();
@@ -61,14 +54,14 @@ public class OrderController {
 
     /*************** update order by ID ***************/
     @PutMapping("/update/{orderId}")
-    public ResponseEntity<ResponseDTO> updateOrder(@PathVariable("orderId") int orderId,
-                                                      @RequestParam String address){
-        return  orderService.updateOrder(orderId, address);
+    public ResponseEntity<ResponseDTO> updateOrder(@PathVariable("orderId") Integer orderId,
+                                                      @RequestBody OrderDTO orderDTO){
+        return  orderService.updateOrder(orderId, orderDTO);
     }
 
     /*************** delete order by its Id ***************/
     @DeleteMapping("/cancel/{orderId}")
-    public ResponseEntity<ResponseDTO> deleteOrderById(@PathVariable int orderId){
+    public ResponseEntity<ResponseDTO> deleteOrderById(@PathVariable Integer orderId){
         orderService.cancelOrderData(orderId);
         ResponseDTO respDTO = new ResponseDTO("Order Cancelled Successfully", "with order Id : " +orderId);
         return new ResponseEntity<>(respDTO, HttpStatus.OK);

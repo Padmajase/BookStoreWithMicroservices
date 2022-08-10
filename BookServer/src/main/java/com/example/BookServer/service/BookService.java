@@ -2,8 +2,10 @@ package com.example.BookServer.service;
 
 import com.example.BookServer.dto.BookDTO;
 import com.example.BookServer.dto.ResponseDTO;
+import com.example.BookServer.exception.BookException;
 import com.example.BookServer.model.BookData;
 import com.example.BookServer.repository.BookRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,18 +15,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class BookService implements IBookService {
 
     @Autowired
     private BookRepository bookRepository;
     @Override
     public BookData addBook(BookDTO bookDTO) {
-        BookData bookData = new BookData(bookDTO);
-//        BookData bookData = new BookData(bookDTO);
-        bookRepository.save(bookData);
-        return bookData;
+        BookData book = new BookData(bookDTO);
+        bookRepository.save(book);
+        return  book;
     }
-
 
     @Override
     public List<BookData> getBookList() {
@@ -32,33 +33,26 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public void deleteBookData(int bookId) {
-        bookRepository.deleteById(bookId);
+    public BookData getBookById(Integer bookId) {
+        return bookRepository.findById(bookId).orElseThrow(()
+                -> new BookException("book with id"+bookId + "does not exist"));
     }
-
     @Override
-    public ResponseEntity<ResponseDTO> updateBookById(int bookId, BookDTO bookDTO) {
-        List<BookData> bookDataList = this.getBookList();
-        for (BookData bookData : bookDataList) {
-            if(bookData.getBookId() == bookId) {
-                bookData.setBookName(bookDTO.bookName);
-                bookData.setBookAuthor(bookDTO.bookAuthor);
-                bookData.setBookPrice(bookDTO.bookPrice);
-                bookData.setQuantity(bookDTO.quantity);
-
-                bookRepository.save(bookData);
-                ResponseDTO respDTO = new ResponseDTO("Book Data Updated Successfully ", bookData);
-                return new ResponseEntity<>(respDTO, HttpStatus.OK);
-            } else {
-                ResponseDTO respDTO = new ResponseDTO("Book not present with given Id ", bookId);
-                return new ResponseEntity<>(respDTO, HttpStatus.OK);
-            }
+    public ResponseEntity<ResponseDTO> updateBookById(Integer bookId, BookDTO bookDTO) {
+        BookData book = this.getBookById(bookId);
+        if(book == null) {
+            ResponseDTO respDTO = new ResponseDTO("book not present with given Id ", bookId);
+            return new ResponseEntity<>(respDTO, HttpStatus.OK);
+        } else {
+            book.updateBook(bookDTO);
+            bookRepository.save(book);
+            ResponseDTO respDTO = new ResponseDTO("User Details Updated Successfully ", book);
+            return new ResponseEntity<>(respDTO, HttpStatus.OK);
         }
-        return null;
     }
 
     @Override
-    public Optional<BookData> getBookById(int bookId) {
-        return bookRepository.findById(bookId);
+    public void deleteBookData(Integer bookId) {
+        bookRepository.deleteById(bookId);
     }
 }

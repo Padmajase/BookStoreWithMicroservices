@@ -1,8 +1,8 @@
 package com.example.BookServer.dto;
 
 public class ResponseDTO {
-    private String message;
-    private Object data;
+    public String message;
+    public Object data;
 
     public ResponseDTO(String message, Object data) {
         this.message = message;

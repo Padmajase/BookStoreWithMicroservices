@@ -8,11 +8,13 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface IOrderService {
-    OrderData createOrderData(OrderDTO orderDTO, int bookId, int userId);
+    OrderData createOrderData(OrderDTO orderDTO);
 
     List<OrderData> getOrderList();
 
-    ResponseEntity<ResponseDTO> updateOrder(int orderId, String address);
+    OrderData getOrderById(Integer orderId);
 
-    void cancelOrderData(int orderId);
+    ResponseEntity<ResponseDTO> updateOrder(Integer orderId, OrderDTO orderDTO);
+
+    void cancelOrderData(Integer orderId);
 }

@@ -13,19 +13,19 @@ public class UserAspect {
 
     @Before("execution(* com.example.CustomerServer.service.UserService.updateUserById(..))")
     public String beforeUpdateUser(JoinPoint joinPoint){
-        System.out.println("fetching User with given id ");
-        return "User is fetched";
+        System.out.println("fetching given user details ");
+        return "User details fetching";
     }
 
     @After("execution(* com.example.CustomerServer.service.UserService.updateUserById(..))")
     public String afterBookUpdate(){
-        System.out.println("updating User ");
-        return "user updation ";
+        System.out.println("update method executed ");
+        return "user updated ";
     }
 
     @AfterReturning("execution(* com.example.CustomerServer.service.UserService.updateUserById(..))")
     public String afterReturnBookUpdate(JoinPoint joinPoint){
         System.out.println("user updation");
-        return "user has been updated";
+        return "user updation";
     }
 }

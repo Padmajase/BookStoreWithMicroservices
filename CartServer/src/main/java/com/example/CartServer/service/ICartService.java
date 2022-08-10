@@ -1,6 +1,7 @@
 package com.example.CartServer.service;
 
 
+import com.example.CartServer.dto.CartDTO;
 import com.example.CartServer.dto.ResponseDTO;
 import com.example.CartServer.model.CartData;
 import org.springframework.http.ResponseEntity;
@@ -8,13 +9,15 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface ICartService {
-    List<CartData> getBookListInCart();
 
-    ResponseEntity<ResponseDTO> saveBooksToCart(int quantity, int bookId, int userId) throws Exception;
+    ResponseEntity<ResponseDTO> saveCartData(CartDTO cartDTO);
 
-    ResponseEntity<ResponseDTO> updateBookQuantity(int quantity, int cartBookId);
+    List<CartData> getCartList();
 
-    ResponseEntity<ResponseDTO> deleteBookFromCart(int bookId);
+    CartData getCartDataById(Integer cartId);
 
-    ResponseEntity<ResponseDTO> saveBooksToCart(int quantity, int bookId, String token) throws Exception;
+
+    ResponseEntity<ResponseDTO> updateCart(Integer quantity, CartDTO cartDTO);
+
+    ResponseEntity<ResponseDTO> deleteCartData(Integer cartId);
 }

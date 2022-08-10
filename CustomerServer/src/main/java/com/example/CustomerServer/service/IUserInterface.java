@@ -14,14 +14,15 @@ public interface IUserInterface {
     ResponseEntity<ResponseDTO> createUserProfile(UserDTO userDTO);
 
     List<UserData> getUserList();
+    UserData getUserById(Integer userId);
 
-    ResponseDTO loginValidation(LoginDTO loginDTO);
-
-    void deleteUserData(int userId);
-
-    ResponseEntity<ResponseDTO> updateUserById(int userId, UserDTO userDTO);
-
-    Optional<UserData> getUserById(int userId);
+    ResponseEntity<ResponseDTO> updateUserById(Integer userId, UserDTO userDTO);
 
     ResponseEntity<ResponseDTO> getUserByToken(String token);
+
+    void deleteUserData(Integer userId);
+
+
+//    ResponseDTO loginValidation(LoginDTO loginDTO);
+
 }

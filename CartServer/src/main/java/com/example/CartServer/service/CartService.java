@@ -1,5 +1,6 @@
 package com.example.CartServer.service;
 
+import com.example.CartServer.dto.CartDTO;
 import com.example.CartServer.dto.ResponseDTO;
 import com.example.CartServer.exception.CartException;
 import com.example.CartServer.model.BookData;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CartService implements ICartService{
@@ -25,56 +25,72 @@ public class CartService implements ICartService{
     RestTemplate restTemplate;
 
 
+    /*************** adding cart data ***************/
+    @Override
+    public ResponseEntity<ResponseDTO> saveCartData(CartDTO cartDTO) {
+        BookData bookData  = restTemplate.getForObject("http://localhost:8001/book/get/" + cartDTO.getBookId(), BookData.class);
+        UserData userData  = restTemplate.getForObject("http://localhost:8002/user/get/" + cartDTO.getUserId(), UserData.class);
+//        UserData userData  = restTemplate.getForObject("http://localhost:8002/user?token=" + token, UserData.class);
+        if(bookData == null || userData == null){
+            throw new CartException("the user not found  "+ userData + " or the book not found "+bookData);
+        }
+        if(bookData.getQuantity() == 0)
+            throw new CartException("book not available currently");
+        else {
+            if (cartDTO.getQuantity() > bookData.getQuantity())
+                throw new CartException("exceeded the book quantity");
+            CartData cartData = new CartData(bookData, userData, cartDTO.getQuantity());
+            cartRepository.save(cartData);
+            ResponseDTO responseDTO = new ResponseDTO("book saved in cart ", cartData);
+            return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        }
+    }
+
     /*************** getting cart list ***************/
     @Override
-    public List<CartData> getBookListInCart() {
+    public List<CartData> getCartList() {
 
         return cartRepository.findAll();
     }
 
-    /*************** adding book in cart repository ***************/
+    /*************** getting cart data by id ***************/
     @Override
-    public ResponseEntity<ResponseDTO> saveBooksToCart(int quantity, int bookId, int userId) throws Exception {
-        BookData bookData  = restTemplate.getForObject("localhost:8001/book/get/" + bookId, BookData.class);
-        UserData userData  = restTemplate.getForObject("localhost:8002/user/get/" + userId, UserData.class);
+    public CartData getCartDataById(Integer cartId) {
+        return cartRepository.findById(cartId).orElseThrow(() ->
+               new CartException("cart data not found with given id"));
+    }
+
+    /*************** updating cart data ***************/
+    @Override
+    public ResponseEntity<ResponseDTO> updateCart(Integer cartId, CartDTO cartDTO) {
+        BookData bookData  = restTemplate.getForObject("http://localhost:8001/book/get/" + cartDTO.getBookId(), BookData.class);
+        UserData userData  = restTemplate.getForObject("http://localhost:8002/user/get/" + cartDTO.getUserId(), UserData.class);
 //        UserData userData  = restTemplate.getForObject("http://localhost:8002/user?token=" + token, UserData.class);
         if(bookData == null || userData == null){
-            throw new CartException("the user not found  "+ userData + " or the book not found "+bookData, CartException.ExceptionType.ENDPOINT_INVALID_OR_NULL);
+            throw new CartException("the user not found  "+ userData + " or the book not found "+bookData);
+        } else {
+            CartData cartData = this.getCartDataById(cartId);
+            if (cartData.equals(null)) {
+                throw new CartException("no cart data present");
+            } else {
+                cartData.setQuantity(cartDTO.getQuantity());
+                cartData.setBookData(bookData);
+                cartData.setUserData(userData);
+                cartRepository.save(cartData);
+                ResponseDTO responseDTO = new ResponseDTO("updated cart data", cartData);
+                return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+            }
         }
-        CartData cartData = new CartData(bookData, userData, quantity);
-        if(quantity > bookData.getQuantity())
-            throw new CartException("exceeded the book quantity", CartException.ExceptionType.QUANTITY_IS_GREATER);
-        cartRepository.save(cartData);
-        ResponseDTO responseDTO = new ResponseDTO("book saved in cart ", cartData);
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-    /*************** updating book quantity ***************/
+    /*************** deleting cart data ***************/
     @Override
-    public ResponseEntity<ResponseDTO> updateBookQuantity(int quantity, int cartBookId) {
-        Optional<CartData> cartData = cartRepository.findById(cartBookId);
-        if(cartData.isEmpty())
-            throw new CartException("no book present", CartException.ExceptionType.NO_DATA_REGISTERED);
-//        not recognized optional
-        cartData.get().setQuantity(quantity);
-        cartRepository.save(cartData.get());
-        ResponseDTO responseDTO = new ResponseDTO("updated quantity", cartData);
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
-    }
-
-    /*************** deleting book from cart repository ***************/
-    @Override
-    public  ResponseEntity<ResponseDTO> deleteBookFromCart(int bookId) {
-        if (cartRepository.findById(bookId).isPresent()){
-            cartRepository.deleteById(bookId);
-            ResponseDTO responseDTO = new ResponseDTO("book deleted successfully with book id : ",bookId);
+    public  ResponseEntity<ResponseDTO> deleteCartData(Integer cartId) {
+        if (cartRepository.findById(cartId).isPresent()){
+            cartRepository.deleteById(cartId);
+            ResponseDTO responseDTO = new ResponseDTO("cart data deleted successfully with id : ",cartId);
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
         } else
-            throw new CartException("book not found with given id ", CartException.ExceptionType.NOT_VALID_CART_DATA);
-    }
-
-    @Override
-    public ResponseEntity<ResponseDTO> saveBooksToCart(int quantity, int bookId, String token) throws Exception {
-        return null;
+            throw new CartException("cart data not found with given id ");
     }
 }

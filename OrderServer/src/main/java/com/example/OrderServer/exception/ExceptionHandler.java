@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 public class ExceptionHandler {
     private static final String message = "Exception While Processing REST Request";
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(UserRegistrationException.class)
-    public ResponseEntity<ResponseDTO> handleUserRegistrationException(UserRegistrationException exception) {
+    @org.springframework.web.bind.annotation.ExceptionHandler(OrderException.class)
+    public ResponseEntity<ResponseDTO> handleUserRegistrationException(OrderException exception) {
         ResponseDTO responseDTO = new ResponseDTO(message, exception.getMessage());
         return new ResponseEntity<>(responseDTO, HttpStatus.BAD_REQUEST);
     }

@@ -21,11 +21,13 @@ public class MessageConfig {
         return new Queue(QUEUE);
     }
 
+
     /***************  creating exchange ***************/
     @Bean
     public TopicExchange exchange(){
         return new TopicExchange(EXCHANGE);
     }
+
 
     /***************  binding queue to exchange ***************/
     @Bean

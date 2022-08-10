@@ -13,10 +13,10 @@ public interface IBookService {
 
     List<BookData> getBookList();
 
-    void deleteBookData(int bookId);
+    void deleteBookData(Integer bookId);
 
-    ResponseEntity<ResponseDTO> updateBookById(int bookId, BookDTO bookDTO);
+    ResponseEntity<ResponseDTO> updateBookById(Integer bookId, BookDTO bookDTO);
 
 
-    Optional<BookData> getBookById(int bookId);
+    BookData getBookById(Integer bookId);
 }

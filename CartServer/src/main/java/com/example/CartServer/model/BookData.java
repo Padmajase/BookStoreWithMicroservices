@@ -1,41 +1,33 @@
 package com.example.CartServer.model;
 
-import com.example.CartServer.dto.BookDTO;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class BookData {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int bookId;
-    private int quantity;
+    private Integer bookId;
     private String bookName;
     private String bookAuthor;
-    private long bookPrice;
+    private Integer bookPrice;
+    private Integer quantity;
 
-    public BookData(int bookId, BookDTO bookDTO) {
-        this.bookId=bookId;
-        this.bookName=bookDTO.bookName;
-        this.bookAuthor=bookDTO.bookAuthor;
-        this.bookPrice=bookDTO.bookPrice;
+    public BookData() {
     }
 
-     public String getBookName() {
-        return bookName;
+    public BookData(Integer bookId, String bookName, String bookAuthor, Integer bookPrice, Integer quantity) {
+        this.bookId = bookId;
+        this.bookName = bookName;
+        this.bookAuthor = bookAuthor;
+        this.bookPrice = bookPrice;
+        this.quantity = quantity;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 }

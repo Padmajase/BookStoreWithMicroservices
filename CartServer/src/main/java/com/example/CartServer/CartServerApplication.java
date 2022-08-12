@@ -14,7 +14,6 @@ public class CartServerApplication {
 	}
 
 	@Bean
-	@LoadBalanced
 	public RestTemplate restTemplate(){
 		return new RestTemplate();
 	}

@@ -1,9 +1,7 @@
 package com.example.CustomerServer.controller;
 
-import com.example.CustomerServer.dto.LoginDTO;
 import com.example.CustomerServer.dto.ResponseDTO;
 import com.example.CustomerServer.dto.UserDTO;
-import com.example.CustomerServer.model.EmailData;
 import com.example.CustomerServer.model.UserData;
 import com.example.CustomerServer.rabbitmq.MessageConfig;
 import com.example.CustomerServer.util.EmailService;

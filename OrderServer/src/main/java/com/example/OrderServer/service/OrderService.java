@@ -7,7 +7,6 @@ import com.example.OrderServer.exception.OrderException;
 import com.example.OrderServer.dto.Book;
 import com.example.OrderServer.model.OrderData;
 import com.example.OrderServer.repository.OrderRepository;
-import com.example.OrderServer.token.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,8 +20,8 @@ import java.util.List;
 @Slf4j
 public class OrderService implements IOrderService {
 
-    RestTemplate restTemplate = new RestTemplate();
-
+    @Autowired
+    RestTemplate template;
     /*************** injecting Order Repository Object ***************/
     @Autowired
     private OrderRepository orderRepository;
@@ -30,17 +29,24 @@ public class OrderService implements IOrderService {
     @Override
     public OrderData createOrderData(OrderDTO orderDTO) {
         log.info("before url execution");
-        User userData = restTemplate.getForObject("http://localhost:8002/user/get/" +orderDTO.getUserId(), User.class);
+        User user;
+        Book book;
+//        user = template.getForObject("http://localhost:8002/user/get/{userId}" + orderDTO.getUserId(), User.class);
+        user = template.getForObject("http://localhost:8002/user/get/" + orderDTO.getUserId(), User.class);
+
         log.info("after user rest");
-        Book bookData = restTemplate.getForObject("localhost:8001/book/get/" + orderDTO.getBookId(), Book.class);
-        if(bookData == null || userData==null){
+        book = template.getForObject("http://localhost:8001/book/get/" +orderDTO.getBookId(), Book.class);
+        Integer b = book.getQuantity();
+        log.info("book object", b);
+        if(book == null){
             throw new OrderException("order Id or Book Id is Invalid");
         } else {
-            if(orderDTO.getQuantity() > bookData.getQuantity()){
+            if(orderDTO.getQuantity() > book.getQuantity()){
                 throw new OrderException("quantity is greater");
             } else {
-                Integer totalPrice = orderDTO.getQuantity() * bookData.getBookPrice();
+                Integer totalPrice = orderDTO.getQuantity() * book.getBookPrice();
                 OrderData orderData = new OrderData(orderDTO);
+                orderData.setPrice(totalPrice);
                 log.info("before save");
                 orderRepository.save(orderData);
                 return orderData;

@@ -18,9 +18,11 @@ public class OrderData {
     public Integer bookId;
 
     public OrderData() {
+        super();
     }
 
     public OrderData(OrderDTO orderDTO) {
+        super();
         this.quantity = orderDTO.getQuantity();
         this.address = orderDTO.getAddress();
 //        this.price = totalPrice;
